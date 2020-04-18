@@ -52,11 +52,11 @@ def wx_maotai():
 
                 requests.get(
                     'http://sc.ftqq.com/SCU93922T5afdfdbac6c06b06a0a413398a63c58e5e95901990f2d.send?text=' + title + "补货了库存" + '&desp=' + str(bbb) + "'")
-                '''
+                
                 requests.get(
                     'http://sc.ftqq.com/SCU94093T40ff79741772f12c973146a6f8cbfe0b5e97af0555a10.send?text='
                     + title + '&desp=' + str(bbb) + "'")
-                '''
+                
         time.sleep(10)
     else:
         requests.get(
