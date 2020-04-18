@@ -2,9 +2,9 @@
 import requests
 import json
 import time
+from apscheduler.schedulers.blocking import BlockingScheduler
 
-
-while True:
+def wx_maotai():
     headers = {
     'Host': 'web.sjhgo.com',
     'accept': '*/*',
@@ -30,7 +30,6 @@ while True:
         params=params,
         data=data,
         verify=False)
-    print(response.text)
     if json.loads(response.text)['data'] != '请求访问令牌非法,请重新登录':
         try:
             res = json.loads(response.text)['data']['mktList']
@@ -63,4 +62,8 @@ while True:
         requests.get(
             'http://sc.ftqq.com/SCU93922T5afdfdbac6c06b06a0a413398a63c58e5e95901990f2d.send?text=token失效,重新登录'
         )
-        break
+
+if __name__ == "__main__":
+    scheduler = BlockingScheduler()
+    scheduler.add_job(wx_maotai, 'cron', hour='6-23', second='*/1')
+    scheduler.start()
