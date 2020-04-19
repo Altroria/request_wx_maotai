@@ -5,6 +5,7 @@ import time
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 def wx_maotai():
+    
     headers = {
     'Host': 'web.sjhgo.com',
     'accept': '*/*',
@@ -30,7 +31,7 @@ def wx_maotai():
         params=params,
         data=data,
         verify=False)
-    
+
     if json.loads(response.text)['data'] == '请求访问令牌非法,请重新登录':
         requests.get(
             'http://sc.ftqq.com/SCU93922T5afdfdbac6c06b06a0a413398a63c58e5e95901990f2d.send?text=token失效,重新登录'
@@ -52,19 +53,21 @@ def wx_maotai():
             while i < len(res):
                 q = res[i - 1]
                 i = i + 1
-                while q["sl"] != '1.00' and q["sl"] != '2.00':
+                num = int(float(q["sl"]))
+                if num >= 2:
                     aaa = "店名" + ":" + q["mktid_name"] + "\n\n" + "地址" + ":" + q[
                         "address"] + "\n\n" + "库存" + ":" + q["sl"] + "\n\n"
                     bbb = bbb + aaa
                     title = q["mktid_name"] + "\n\n"
-                requests.get(
-                    'http://sc.ftqq.com/SCU93922T5afdfdbac6c06b06a0a413398a63c58e5e95901990f2d.send?text=' + title + "补货了库存" + '&desp=' + str(bbb) + "'")
-                requests.get(
-                    'http://sc.ftqq.com/SCU94093T40ff79741772f12c973146a6f8cbfe0b5e97af0555a10.send?text='
-                    + title + '&desp=' + str(bbb) + "'")
-        
+                    requests.get(
+                        'http://sc.ftqq.com/SCU93922T5afdfdbac6c06b06a0a413398a63c58e5e95901990f2d.send?text=' + title + "补货了库存" + '&desp=' + str(bbb) + "'")
+                    
+                    requests.get(
+                        'http://sc.ftqq.com/SCU94093T40ff79741772f12c973146a6f8cbfe0b5e97af0555a10.send?text='
+                        + title + '&desp=' + str(bbb) + "'")
+                    
 
 if __name__ == "__main__":
     scheduler = BlockingScheduler()
-    scheduler.add_job(wx_maotai, 'cron', hour='6-23', second='*/1')
+    scheduler.add_job(wx_maotai, 'cron', hour='6-23', second='*/2')
     scheduler.start()
