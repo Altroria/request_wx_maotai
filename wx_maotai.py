@@ -2,7 +2,21 @@
 import requests
 import json
 import time
+import os
+file_path = os.path.join(os.getcwd() + "/user.json")
 from apscheduler.schedulers.blocking import BlockingScheduler
+
+
+def get_token():
+    with open(file_path) as f:
+    data = json.load(f)
+    f.close
+    for cookie in data:
+        a = ({
+            'token': cookie['token'],
+            "sign": cookie['sign']
+        })
+    return(a)
 
 def wx_maotai():
     
@@ -17,8 +31,8 @@ def wx_maotai():
 
     params = (
     ('method', 'pshop.work.exchangeGift.queryMessage'),
-    ('token', '5975985e-c809-4593-9cb5-e5ae703f6c8c'),
-    ('sign', '08906115c0e0df000594abe4442b91c2'),
+    ('token', get_token["token"]),
+    ('sign', get_token["sign"]),
     ('app_key', '1570710699900928100_hgo1'),
 )
 
@@ -40,6 +54,11 @@ def wx_maotai():
         requests.get(
             'http://sc.ftqq.com/SCU93922T5afdfdbac6c06b06a0a413398a63c58e5e95901990f2d.send?text=远程非法请求数据'
         )
+    elif json.loads(response.text)['data'] == '服务繁忙，稍后再试':
+        requests.get(
+            'http://sc.ftqq.com/SCU93922T5afdfdbac6c06b06a0a413398a63c58e5e95901990f2d.send?text=服务繁忙，稍后再试'
+        )
+        time.sleep(300)
     else:
         try:
             res = json.loads(response.text)['data']['mktList']
