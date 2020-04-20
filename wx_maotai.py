@@ -26,7 +26,7 @@ def wx_maotai():
         ('method', 'pshop.work.exchangeGift.queryMessage'),
         ('token', '177f770d-c756-45cf-b863-33a81843bf61'),
         ('sign', '5db8ab3f9430796b4fe4632f9f5ce881'),
-        ('app_key', '5db8ab3f9430796b4fe4632f9f5ce881'),
+        ('app_key', '1570710699900928100_hgo1'),
     )
 
     data = '{"event_id":"166400004313156892","gbid":"Z77"}'
