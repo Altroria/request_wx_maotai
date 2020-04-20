@@ -2,8 +2,11 @@
 import requests
 import json
 import time
+from apscheduler.schedulers.blocking import BlockingScheduler
 
-while True:
+
+def wx_maotai():
+
     headers = {
         'Host':
         'web.sjhgo.com',
@@ -21,9 +24,9 @@ while True:
 
     params = (
         ('method', 'pshop.work.exchangeGift.queryMessage'),
-        ('token', '8b150121-fce5-4321-bef5-d8d74b51df10'),
-        ('sign', 'dee1e46310348bc64da5a093d2f0f706'),
-        ('app_key', 'hgo'),
+        ('token', '177f770d-c756-45cf-b863-33a81843bf61'),
+        ('sign', '08906115c0e0df000594abe4442b91c2'),
+        ('app_key', '5db8ab3f9430796b4fe4632f9f5ce881'),
     )
 
     data = '{"event_id":"166400004313156892","gbid":"Z77"}'
@@ -35,23 +38,15 @@ while True:
         data=data,
         verify=False)
 
-    params1 = (
-        ('method', 'pshop.work.exchangeGift.queryMessage'),
-        ('token', '8b150121-fce5-4321-bef5-d8d74b51df10'),
-        ('sign', 'd83fe15ac2ee2b74310fe40fba5fda05'),
-        ('app_key', 'hgo'),
-    )
-
-    data1 = '{"event_id":"166273215184211208","gbid":"Z81"}'
-
-    response1 = requests.post(
-        'https://web.sjhgo.com/omp-pshop-webin/rest',
-        headers=headers,
-        params=params1,
-        data=data1,
-        verify=False)
-
-    if json.loads(response.text)['data'] != '请求访问令牌非法,请重新登录':
+    if json.loads(response.text)['data'] == '请求访问令牌非法,请重新登录':
+        requests.get(
+            'http://sc.ftqq.com/SCU93922T5afdfdbac6c06b06a0a413398a63c58e5e95901990f2d.send?text=token失效,重新登录'
+        )
+    elif json.loads(response.text)['data'] == '远程非法数据请求!':
+        requests.get(
+            'http://sc.ftqq.com/SCU93922T5afdfdbac6c06b06a0a413398a63c58e5e95901990f2d.send?text=远程非法请求数据'
+        )
+    else:
         try:
             res = json.loads(response.text)['data']['mktList']
         except:
@@ -64,19 +59,23 @@ while True:
             while i < len(res):
                 q = res[i - 1]
                 i = i + 1
-                aaa = "店名" + ":" + q["mktid_name"] + "\n\n" + "地址" + ":" + q[
-                    "address"] + "\n\n" + "库存" + ":" + q["sl"] + "\n\n"
-                bbb = bbb + aaa
-                title = q["mktid_name"] + "\n\n"
+                num = int(float(q["sl"]))
+                if num >= 2:
+                    aaa = "店名" + ":" + q[
+                        "mktid_name"] + "\n\n" + "地址" + ":" + q[
+                            "address"] + "\n\n" + "库存" + ":" + q["sl"] + "\n\n"
+                    bbb = bbb + aaa
+                    title = q["mktid_name"] + "\n\n"
+                    requests.get(
+                        'http://sc.ftqq.com/SCU93922T5afdfdbac6c06b06a0a413398a63c58e5e95901990f2d.send?text='
+                        + title + "补货了库存" + '&desp=' + str(bbb) + "'")
 
-            requests.get(
-                'http://sc.ftqq.com/SCU93922T5afdfdbac6c06b06a0a413398a63c58e5e95901990f2d.send?text=' + title + "补货了库存" + '&desp=' + str(bbb) + "'")
-            requests.get(
-                'http://sc.ftqq.com/SCU94093T40ff79741772f12c973146a6f8cbfe0b5e97af0555a10.send?text='
-                + title + '&desp=' + str(bbb) + "'")
-        time.sleep(10)
-    else:
-        requests.get(
-            'http://sc.ftqq.com/SCU93922T5afdfdbac6c06b06a0a413398a63c58e5e95901990f2d.send?text=token失效,重新登录'
-        )
-        break
+                    requests.get(
+                        'http://sc.ftqq.com/SCU94093T40ff79741772f12c973146a6f8cbfe0b5e97af0555a10.send?text='
+                        + title + '&desp=' + str(bbb) + "'")
+
+
+if __name__ == "__main__":
+    scheduler = BlockingScheduler()
+    scheduler.add_job(wx_maotai, 'cron', hour='6-23', second='*/2')
+    scheduler.start()
