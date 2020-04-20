@@ -25,7 +25,7 @@ def wx_maotai():
     params = (
         ('method', 'pshop.work.exchangeGift.queryMessage'),
         ('token', '177f770d-c756-45cf-b863-33a81843bf61'),
-        ('sign', '08906115c0e0df000594abe4442b91c2'),
+        ('sign', '5db8ab3f9430796b4fe4632f9f5ce881'),
         ('app_key', '5db8ab3f9430796b4fe4632f9f5ce881'),
     )
 
