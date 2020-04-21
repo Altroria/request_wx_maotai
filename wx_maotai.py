@@ -50,7 +50,7 @@ def wx_maotai():
 
     if json.loads(response.text)['data'] == '请求访问令牌非法,请重新登录':
         requests.get(
-            'http://sc.ftqq.com/SCU93922T5afdfdbac6c06b06a0a413398a63c58e5e95901990f2d.send?text=token失效,重新登录'
+            'http://sc.ftqq.com/SCU94798Tf2c690b6bbdf8cbd685773714ac081a25e9e4f0cc853f.send?text=token失效,重新登录'
         )
     elif json.loads(response.text)['data'] == '远程非法数据请求!':
         requests.get(
