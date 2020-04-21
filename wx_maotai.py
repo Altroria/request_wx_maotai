@@ -92,5 +92,5 @@ def wx_maotai():
 
 if __name__ == "__main__":
     scheduler = BlockingScheduler()
-    scheduler.add_job(wx_maotai, 'cron', hour='6-23', second='*/2')
+    scheduler.add_job(wx_maotai, 'cron', hour='6-23', second='*/1')
     scheduler.start()
